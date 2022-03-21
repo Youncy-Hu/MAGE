@@ -1,7 +1,7 @@
 # Make It Move: Controllable Image-to-Video Generation with Text Descriptions
 ![Screenshot](examples/TI2V.gif)
 
-This repository contains datasets and source code used in the CVPR'2022 paper ``Make It Move: Controllable Image-to-Video Generation with Text Descriptions".
+This repository contains datasets and some generated examples from MAGE used in the CVPR'2022 paper ``Make It Move: Controllable Image-to-Video Generation with Text Descriptions".
 
 ## Dataset Generation
 ### Moving MNIST datasets
@@ -23,35 +23,16 @@ Then, you can generate text descriptions by running:
 $ python data/gen_cater_text_anno.py
 ```
 
-## Baseline
-There are two stages training in our proposed baseline, MAGE. The first stage is to train a VQ-VAE encoder and decoder. The second stage is to train the remaining video generation model.
-
-### Environment
-Our code has been tested on Ubuntu 18.04. Before starting, please configure your Anaconda environment by
-```bash
-$ conda  create -n mage python=3.6
-$ conda activate mage
-$ pip install -r requirements.txt
-```
-
-### Stage 1. VQ-VAE Training
-```bash
-$ python train_vqvae.py --dataset mnist --data-root /data/data_file --output-folder ./models/vqvae_model_file
-```
-
-### Stage 2. MAGE Training
-```bash
-$ python train_mage.py --dataset mnist --data-root ./data/data_file --vqvae-model ./models/vqvae_model_file --checkpoint-path ./models/mage_model_file 
-```
-
-### Test
-
-```bash
-$ python test_mage.py --dataset mnist --data-root ./data/data_file --vqvae-model ./models/vqvae_model_file --mage_model ./models/mage_model_file 
-```
-
-### Generated samples
+## Generated Samples of MAGE
+### Deterministic Generation
 ![Screenshot](examples/example1.gif)
+
+### Diverse Generation
+![Screenshot](examples/example2.gif)
+![Screenshot](examples/example3.gif)
+
+### Failure Cases
+![Screenshot](examples/failure_case.gif)
 
 ## Citation
 Coming soon.
