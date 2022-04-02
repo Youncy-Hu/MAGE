@@ -35,4 +35,11 @@ $ python data/gen_cater_text_anno.py
 ![Screenshot](examples/failure_case.gif)
 
 ## Citation
-Coming soon.
+```
+@InProceedings{hu2022mage,
+    title={Make It Move: Controllable Image-to-Video Generation with Text Descriptions},
+    author={Yaosi Hu and Chong Luo and Zhenzhong Chen},
+    booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    year={2022}
+}
+```
