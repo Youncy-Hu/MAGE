@@ -6,7 +6,7 @@ from tqdm import tqdm
 import logging
 import subprocess
 import re
-import cPickle as pkl
+import pickle as pkl
 import math
 import random
 
@@ -107,12 +107,12 @@ def main():
     if osp.exists(data_cache_fpath):
         print('Found pre-computed file of good rendered data {}'.format(
             data_cache_fpath))
-        with open(data_cache_fpath, 'r') as fin:
+        with open(data_cache_fpath, 'rb') as fin:
             data = pkl.load(fin)
         print('...Read.')
     else:
         data = read_data(scene_files)
-        with open(data_cache_fpath, 'w') as fout:
+        with open(data_cache_fpath, 'wb') as fout:
             pkl.dump(data, fout)
     print('Found {} good videos out of {}'.format(len(data), len(scene_files)))
     
@@ -126,7 +126,7 @@ def main():
         split_anno = {}
 
         for idx in range(len(split_data)):
-            video_path = split_data[idx][0][-27:]
+            video_path = '/'.join(split_data[idx][0].split('/')[-2:])
             metadata = split_data[idx][1]
             movements = metadata['movements']
             objects = metadata['objects']
@@ -145,7 +145,7 @@ def main():
                                                         objects[sbj_id]['material'],
                                                         Shape_to_Name[objects[sbj_id]['shape']])
                     x1, y1 = coordinate_2d(final_pos[0], final_pos[1], 3, 3)
-                    x = '({}, {}).'.format(x1, y1)
+                    x = '({}, {})'.format(x1, y1)
                 if dataset == 'CATER-GEN-v1':
                     sbj_anno = 'the {}'.format(Shape_to_Name[objects[sbj_id]['shape']])
 
