@@ -1,7 +1,7 @@
 # Make It Move: Controllable Image-to-Video Generation with Text Descriptions
 ![Screenshot](examples/TI2V.gif)
 
-This repository contains datasets and some generated examples from MAGE used in the CVPR'2022 paper ``Make It Move: Controllable Image-to-Video Generation with Text Descriptions".
+This repository contains datasets and some generated examples from MAGE used in the CVPR'2022 paper ``Make It Move: Controllable Image-to-Video Generation with Text Descriptions". [[arxiv](https://arxiv.org/abs/2112.02815)]
 
 ## Dataset Generation
 ### Moving MNIST datasets
