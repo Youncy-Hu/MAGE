@@ -1,0 +1,17 @@
+ftfy
+regex
+tqdm
+torch~=1.7.1
+torchvision~=0.8.2
+pytorch_transformers
+imageio
+lmdb
+nltk
+matplotlib
+scikit-image
+IPython
+ffmpeg
+decord
+opencv-python
+tensorboardX
+tensorflow-gpu==2.5.0
