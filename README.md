@@ -3,6 +3,10 @@
 
 This repository contains datasets and some generated examples from MAGE used in the CVPR'2022 paper ``Make It Move: Controllable Image-to-Video Generation with Text Descriptions". [[arxiv](https://arxiv.org/abs/2112.02815)]
 
+## TODO
+- [ ] A modified version of MAGE
+- [ ] New evaluation metrics
+
 ## Dataset Generation
 ### Moving MNIST datasets
 The scripts to generate Moving MNIST datasets are modified based on [Sync-DRAW](https://github.com/syncdraw/Sync-DRAW). You can run the following commands to generate Single Moving MNIST, Double Moving MNIST and our Modified Double Moving MNIST, respectively. 
@@ -48,17 +52,6 @@ $ python train_mage.py --dataset mnist --data-root ./data/data_file --vqvae-mode
 ```bash
 $ python test_mage.py --dataset mnist --data-root ./data/data_file --vqvae-model ./models/vqvae_model_file --mage_model ./models/mage_model_file 
 ```
-
-## Generated Samples of MAGE
-### Deterministic Generation
-![Screenshot](examples/example1.gif)
-
-### Diverse Generation
-![Screenshot](examples/example2.gif)
-![Screenshot](examples/example3.gif)
-
-### Failure Cases
-![Screenshot](examples/failure_case.gif)
 
 ## Citation
 ```
