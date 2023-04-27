@@ -1,0 +1,77 @@
+train:
+  epoch: 201
+  batchsize: 16
+  lr: 5e-5
+  lr_gamma: 0.1
+  lr_steps: [30, 40]
+  cos: True # use cosine lr schedule
+  checkpoint_every: 500
+
+model:
+  target: modules.mage_model.MAGE
+  params:
+    codebook_size: 512
+    frames_length: 10
+    image_resolution: 16
+    vision_width: 512
+    dropout: 0.2
+    use_cids: False
+    randomness: True
+    auto_beta: True
+    v_kl: 50
+
+    first_stage_config:
+      target: ldm.models.autoencoder.AutoencoderKL
+      params:
+        monitor: val/rec_loss
+        embed_dim: 4
+        ckpt_path: "models/autoencoders/kl_f8_cater/last_caterv1.ckpt"
+        ddconfig:
+          double_z: true
+          z_channels: 4
+          resolution: 128
+          in_channels: 3
+          out_ch: 3
+          ch: 128
+          ch_mult:
+            - 1
+            - 2
+            - 4
+            - 4
+          num_res_blocks: 2
+          attn_resolutions: [ ]
+          dropout: 0.0
+        lossconfig:
+          target: torch.nn.Identity
+    text_encoder_config:
+      target: modules.mage_model.TransformerTextEncoder
+      params:
+        vocab_size: 30
+        context_length: 32
+        transformer_width: 512
+        transformer_layers: 2
+        output_dim: 512
+        padding_idx: 0
+        dropout: 0.1
+    ma_config:
+      target: modules.mage_model.MAEncoder
+      params:
+        layers: 1
+        d_model: 512
+    generate_decoder_config:
+      target: modules.mage_model.FlatAxialDecoder
+      params:
+        in_channels: 512
+        out_channels: 4
+        model_channels: 512
+        frames_length: 10
+        layers: 6
+
+data:
+  target: dataload.CATER
+  params:
+    dataset: 'caterv1'
+    data_root: '../datasets/CATER-GEN-v1'
+    frames_length: 10
+    sample_speed: [3.0, 6.0]
+    randomness: True

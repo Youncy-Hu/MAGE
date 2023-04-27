@@ -1,0 +1,62 @@
+train:
+  epoch: 201
+  batchsize: 16
+  lr: 5e-5
+  lr_gamma: 0.1
+  lr_steps: [30, 40]
+  cos: True # use cosine lr schedule
+  checkpoint_every: 500
+
+model:
+  target: modules.mage_model.MAGE
+  params:
+    codebook_size: 512
+    frames_length: 10
+    image_resolution: 16
+    vision_width: 512
+    dropout: 0.1
+    use_cids: True
+    randomness: True
+    alpha: 0.0001
+    beta: 0.0005
+
+    first_stage_config:
+      target: modules.vqvae_model.VectorQuantizedVAE
+      params:
+        ckpt_path: "models/autoencoders/vqvae_f8_cater/caterv2.pt"
+        input_dim: 3
+        dim: 256
+        down_ratio: 8
+        K: 512
+    text_encoder_config:
+      target: modules.mage_model.TransformerTextEncoder
+      params:
+        vocab_size: 50
+        context_length: 38
+        transformer_width: 512
+        transformer_layers: 2
+        output_dim: 512
+        padding_idx: 0
+        dropout: 0.1
+    ma_config:
+      target: modules.mage_model.MAEncoder
+      params:
+        layers: 1
+        d_model: 512
+    generate_decoder_config:
+      target: modules.mage_model.FlatAxialDecoder
+      params:
+        in_channels: 512
+        out_channels: 512
+        model_channels: 512
+        frames_length: 10
+        layers: 6
+
+data:
+  target: dataload.CATER
+  params:
+    dataset: 'caterv2'
+    data_root: '../datasets/CATER-GEN-v2'
+    frames_length: 10
+    sample_speed: [3.0, 6.0]
+    randomness: True
