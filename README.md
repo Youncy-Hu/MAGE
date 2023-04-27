@@ -1,11 +1,20 @@
 # Make It Move: Controllable Image-to-Video Generation with Text Descriptions
 ![Screenshot](examples/TI2V.gif)
 
-This repository contains datasets and some generated examples from MAGE used in the CVPR'2022 paper ``Make It Move: Controllable Image-to-Video Generation with Text Descriptions". [[arxiv](https://arxiv.org/abs/2112.02815)]
+This repository contains datasets and source code used in the CVPR'2022 paper ``Make It Move: Controllable Image-to-Video Generation with Text Descriptions".
 
-## TODO
-- [ ] A modified version of MAGE
-- [ ] New evaluation metrics
+***
+## Update
+- [X] We improved MAGE with a more prowerful autoencoder and a controller over VAE. The code and models of the improved version, MAGE+, have been released at [google drive](https://drive.google.com/drive/folders/1G6DrJxoAGsgAnyZhYfBTpyUC2BXZipWt?usp=sharing).
+- [X] We proposed two no-reference evaluation metrics, action precision and referring expression precision, to evaluate the precision of fine-grained motions based on a captioning-and-matching method. (We chose [SwinBERT](https://github.com/microsoft/SwinBERT) as the captioning model. Please download the trained model on CATER-GENs at [google drive](https://drive.google.com/drive/folders/1YHyYPB8jcF7H3_X3VJTfptzdLBkN798Z?usp=sharing) and put it under 'metrics/swinbert_cater'.)
+```bash
+$ docker run --gpus all --ipc=host --rm -it --mount src=/home/user/SwinBERT/,dst=/videocap,type=bind --mount src=/home/user/,dst=/home/user/,type=bind -w /videocap linjieli222/videocap_torch1.7:fairscale bash -c "source /videocap/setup.sh && bash"
+$ python metrics/swinbert_cater/eval_precision_run_caption_VidSwinBert.py --do_lower_case --do_test --eval_model_dir ./metrics/swinbert_cater/ --test_video_fname /home/results/
+```
+```bash
+$ python eval_precision.py --data-root /home/user/datasets/CATER-GEN-v1 --gen-caption /home/user/results/catergenv1_diverse/generated_captions.json --mode ambiguous
+```
+***
 
 ## Dataset Generation
 ### Moving MNIST datasets
@@ -27,13 +36,14 @@ Then, you can generate text descriptions by running:
 $ python data/gen_cater_text_anno.py
 ```
 
-## Baseline
+## MAGE
 There are two stages training in our proposed baseline, MAGE. The first stage is to train a VQ-VAE encoder and decoder. The second stage is to train the remaining video generation model.
+The trained models are provided at [google drive](https://drive.google.com/drive/folders/1G6DrJxoAGsgAnyZhYfBTpyUC2BXZipWt?usp=sharing).
 
 ### Environment
 Our code has been tested on Ubuntu 18.04. Before starting, please configure your Anaconda environment by
 ```bash
-$ conda  create -n mage python=3.6
+$ conda create -n mage python=3.8
 $ conda activate mage
 $ pip install -r requirements.txt
 ```
@@ -45,15 +55,18 @@ $ python train_vqvae.py --dataset mnist --data-root /data/data_file --output-fol
 
 ### Stage 2. MAGE Training
 ```bash
-$ python train_mage.py --dataset mnist --data-root ./data/data_file --vqvae-model ./models/vqvae_model_file --checkpoint-path ./models/mage_model_file 
+$ python main_mage.py --split train --config config/model.yaml --checkpoint-path ./models/MAGE/model_path 
 ```
 
-### Test
+### Sampling
+
 ```bash
-$ python test_mage.py --dataset mnist --data-root ./data/data_file --vqvae-model ./models/vqvae_model_file --mage_model ./models/mage_model_file 
+$ python main_mage.py --split test --config config/model.yaml --checkpoint-path ./models/MAGE/model_path
 ```
+
 
 ## Citation
+If you find this repository useful in your research then please cite
 ```
 @InProceedings{hu2022mage,
     title={Make It Move: Controllable Image-to-Video Generation with Text Descriptions},
