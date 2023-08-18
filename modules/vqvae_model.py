@@ -166,7 +166,7 @@ class DecoderBlock(nn.Module):
         return self.id_path(x) + self.block(x)
 
 class VectorQuantizedVAE(nn.Module):
-    def __init__(self, input_dim, down_ratio, dim, K=512):
+    def __init__(self, input_dim, down_ratio, dim, K=512, ckpt_path=None, ignore_keys=[]):
         super().__init__()
         if down_ratio == 4:  # A simpler version for MNIST with 4x downsampling ratio
             self.encoder = nn.Sequential(
