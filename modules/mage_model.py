@@ -73,7 +73,6 @@ class TransformerBlock(nn.Module):
     def __init__(self, d_model: int, n_head: int, dropout: float = 0.1):
         super().__init__()
         self.attn = nn.MultiheadAttention(d_model, n_head)
-        # self.ln_1 = nn.LayerNorm(d_model)
         self.ln_q = nn.LayerNorm(d_model)
         self.ln_kv = nn.LayerNorm(d_model)
         self.d_model = d_model
@@ -90,8 +89,8 @@ class TransformerBlock(nn.Module):
         return self.attn(q, k, v, need_weights=False, key_padding_mask=key_mask)[0]
 
     def forward(self, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, key_mask=None, need_weights=False):
-        # x = q + self.dropout(self.attention(q, k, v))
-        x = q + self.dropout(self.attention(self.ln_q(q), self.ln_kv(k), self.ln_kv(v), key_mask))
+        x = q + self.dropout(self.attention(q, k, v)) #NOTE: self.ln_q and self.ln_kv are not utilized in MAGE. Kindly comment out this line when employing MAGE+.
+        # x = q + self.dropout(self.attention(self.ln_q(q), self.ln_kv(k), self.ln_kv(v), key_mask)) #NOTE: Please uncomment this line when employing MAGE+.
         x = x + self.dropout(self.mlp(self.ln_2(x)))
         return x
 
